@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECE Association Dashboard - Modern Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        // Modern color palette
+                        'primary': '#4F46E5',      // Indigo
+                        'primary-dark': '#3730A3', // Dark indigo
+                        'secondary': '#0EA5E9',    // Sky blue
+                        'accent': '#10B981',       // Emerald
+                        'accent-light': '#34D399', // Light emerald
+                        'bg-light': '#F8FAFC',     // Light slate
+                        'text-dark': '#1E293B',    // Slate 800
+                        'text-medium': '#64748B',  // Slate 500
+                        'card-bg': '#FFFFFF',      // White
+                        'highlight': '#F59E0B',    // Amber
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .feature-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            border: 1px solid #E2E8F0;
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(79, 70, 229, 0.1);
+            border-color: #C7D2FE;
+        }
+        .cta-gradient {
+            background: linear-gradient(to right, #4F46E5, #7C3AED);
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3);
+            transition: all 0.3s ease;
+        }
+        .cta-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+        }
+        .outline-button {
+            border: 2px solid #4F46E5;
+            color: #4F46E5;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            border-radius: 9999px;
+        }
+        .outline-button:hover {
+            background-color: #4F46E5;
+            color: white;
+            border-color: #4F46E5;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+            border-bottom-left-radius: 3rem;
+            border-bottom-right-radius: 3rem;
+        }
+        .icon-circle-soft {
+            background: linear-gradient(135deg, #4F46E5, #7C3AED);
+            color: white;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+        }
+        .community-card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+            border: 1px solid #E2E8F0;
+        }
+        .community-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+        .footer-cta {
+            background: linear-gradient(135deg, #0EA5E9, #10B981);
+            color: white;
+            border-top-left-radius: 3rem;
+            border-top-right-radius: 3rem;
+            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Enhanced community chat styles */
+        .community-chat-highlight {
+            background: linear-gradient(135deg, #4F46E5 0%, #3730A3 100%);
+            color: white;
+            border-radius: 2rem;
+            box-shadow: 0 15px 30px rgba(79, 70, 229, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .community-chat-highlight::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+        }
+        .chat-icon-container {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            padding: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .chat-feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Animation for the hero section */
+        .hero-content {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Floating animation for feature cards */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body class="font-sans bg-bg-light text-text-dark">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zm0 12L2 9l10 5 10-5-10-5v10zm0 12L2 14l10 5 10-5-10-5z"/>
+                    </svg>
+                </div>
+                <span class="text-2xl font-extrabold text-text-dark">ECE <span class="text-primary">Connect</span></span>
+            </div>
+            <nav class="hidden md:flex space-x-8 text-base font-medium">
+                <a href="#" class="text-text-medium hover:text-primary transition-colors duration-200">Home</a>
+                <a href="#" class="text-text-medium hover:text-primary transition-colors duration-200">Resources</a>
+                <a href="#" class="text-primary font-semibold border-b-2 border-primary pb-1">Community</a>
+                <a href="#" class="text-text-medium hover:text-primary transition-colors duration-200">Placements</a>
+                <a href="#" class="text-text-medium hover:text-primary transition-colors duration-200">Profile</a>
+            </nav>
+            <div class="flex space-x-4">
+                <a href="#" class="px-6 py-2 outline-button font-medium text-sm">Chat</a>
+                <a href="#" class="px-6 py-2 rounded-full font-medium text-sm text-white cta-gradient">New Event</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="pt-24 pb-32 text-center hero-section relative">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 relative z-10 hero-content">
+            <p class="text-sm font-semibold uppercase text-accent-light tracking-wide mb-3">YOUR ECE ASSOCIATION HUB</p>
+            <h1 class="text-5xl sm:text-6xl md:text-7xl font-extrabold leading-tight mb-5">
+                Connect. Learn. <br class="hidden sm:inline" /><span class="text-accent-light">Innovate Together</span>.
+            </h1>
+            <p class="text-lg text-white text-opacity-80 max-w-3xl mx-auto">
+                A vibrant platform for all ECE students to access resources, share knowledge, and achieve career goals.
+            </p>
+            <div class="mt-10">
+                <a href="#" class="px-8 py-3 rounded-full font-bold text-lg text-primary bg-white hover:bg-gray-100 transition duration-300 shadow-md">
+                    Explore Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16 -mt-16 relative z-20">
+        <div class="grid md:grid-cols-3 gap-10">
+            <div class="feature-card p-8 flex flex-col items-center text-center floating" style="animation-delay: 0.1s;">
+                <div class="w-16 h-16 icon-circle-soft flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM6 20V4h7v5h5v11H6zm12-9h-5V4.5L18 9.5V11zM8 12h8v2H8zm0 3h8v2H8z"/></svg>
+                </div>
+                
+                <h3 class="text-2xl font-extrabold text-text-dark mb-2">Resource Corner</h3>
+                <p class="text-text-medium mb-6">Study Materials & Documents</p>
+                
+                <p class="text-text-medium mb-8 flex-grow leading-relaxed">
+                    Access organized notes, previous year's question papers, lab manuals, and external course links curated by seniors.
+                </p>
+                
+                <a href="#" class="text-primary font-semibold hover:text-accent transition-colors duration-150 flex items-center space-x-2">
+                    <span>Explore Resources</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </a>
+            </div>
+
+            <div class="feature-card p-8 flex flex-col items-center text-center floating" style="animation-delay: 0.2s;">
+                <div class="w-16 h-16 icon-circle-soft flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2V12h2v5z"/></svg>
+                </div>
+                
+                <h3 class="text-2xl font-extrabold text-text-dark mb-2">Tech Blogs</h3>
+                <p class="text-text-medium mb-6">Latest Trends & Project Ideas</p>
+
+                <p class="text-text-medium mb-8 flex-grow leading-relaxed">
+                    Read articles on VLSI, IoT, 5G, and Embedded Systems written by your peers and faculty. Submit your own project write-ups!
+                </p>
+
+                <a href="#" class="text-primary font-semibold hover:text-accent transition-colors duration-150 flex items-center space-x-2">
+                    <span>Read Latest Posts</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </a>
+            </div>
+
+            <div class="feature-card p-8 flex flex-col items-center text-center floating" style="animation-delay: 0.3s;">
+                <div class="w-16 h-16 icon-circle-soft flex items-center justify-center mb-6">
+                    <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+                
+                <h3 class="text-2xl font-extrabold text-text-dark mb-2">Placement Achievements</h3>
+                <p class="text-text-medium mb-6">Success Stories & Preparation</p>
+                
+                <p class="text-text-medium mb-8 flex-grow leading-relaxed">
+                    See the latest placements, filter by company and role, and find interview experiences shared by batchmates who succeeded.
+                </p>
+                
+                <a href="#" class="text-primary font-semibold hover:text-accent transition-colors duration-150 flex items-center space-x-2">
+                    <span>View Success Stories</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Community Chat Section -->
+    <div class="py-20 bg-white mt-12">
+        <div class="max-w-6xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-extrabold text-text-dark mb-4">Community Chat</h2>
+                <p class="text-xl text-text-medium max-w-3xl mx-auto">Connect with peers, get instant help, and stay updated with real-time announcements</p>
+            </div>
+            
+            <div class="community-chat-highlight p-8 md:p-12 mb-16">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div class="text-center md:text-left mb-8 md:mb-0 md:w-1/2 relative z-10">
+                        <div class="chat-icon-container mb-6">
+                            <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-4">Real-Time Community Chat</h3>
+                        <p class="text-lg opacity-90 mb-6">Join the conversation with fellow ECE students. Get instant answers to your questions, share insights, and stay connected with your community.</p>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <a href="#" class="px-6 py-3 rounded-full font-bold text-lg bg-white text-primary hover:bg-gray-100 transition duration-300 shadow-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                                Join Chat Now
+                            </a>
+                            <a href="#" class="px-6 py-3 rounded-full font-bold text-lg border-2 border-white text-white hover:bg-white hover:text-primary transition duration-300 flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                Learn More
+                            </a>
+                        </div>
+                    </div>
+                    <div class="md:w-2/5 relative z-10">
+                        <div class="bg-white rounded-2xl p-6 shadow-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold mr-3">JD</div>
+                                <div>
+                                    <p class="font-bold">John Doe</p>
+                                    <p class="text-xs text-text-medium">Just now</p>
+                                </div>
+                            </div>
+                            <p class="text-text-dark mb-4">Has anyone worked with the STM32 microcontroller for their embedded systems project? I need help with the ADC configuration.</p>
+                            
+                            <div class="flex items-center mb-4">
+                                <div class="w-10 h-10 rounded-full bg-accent flex items-center justify-center text-white font-bold mr-3">AS</div>
+                                <div>
+                                    <p class="font-bold">Alice Smith</p>
+                                    <p class="text-xs text-text-medium">2 min ago</p>
+                                </div>
+                            </div>
+                            <p class="text-text-dark">I've worked with STM32! Check the reference manual page 245. You need to set the ADC clock prescaler first.</p>
+                            
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <div class="flex">
+                                    <input type="text" placeholder="Type your message..." class="flex-grow bg-gray-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                                    <button class="ml-2 bg-primary text-white rounded-full p-2 hover:bg-primary-dark transition duration-200">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-feature-grid">
+                <div class="chat-feature-card">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-white mr-4">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold">Instant Doubt Resolution</h3>
+                    </div>
+                    <p class="text-white text-opacity-80">Get quick answers to technical questions from peers and seniors in real-time.</p>
+                </div>
+                
+                <div class="chat-feature-card">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-white mr-4">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold">Important Announcements</h3>
+                    </div>
+                    <p class="text-white text-opacity-80">Stay updated with the latest events, deadlines, and opportunities from the association.</p>
+                </div>
+                
+                <div class="chat-feature-card">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-full bg-white bg-opacity-20 flex items-center justify-center text-white mr-4">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        </div>
+                        <h3 class="text-xl font-bold">Connect with Peers</h3>
+                    </div>
+                    <p class="text-white text-opacity-80">Build relationships with fellow ECE students across different years and specializations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="py-20 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-t-3xl shadow-inner">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-extrabold text-text-dark mb-3">Community & Events</h2>
+            <p class="text-lg text-text-medium mb-10">Stay updated and contribute to the association's growth and vibrancy.</p>
+            
+            <div class="space-y-6">
+                <div class="community-card flex flex-col sm:flex-row items-center justify-between p-6">
+                    <div class="text-left flex items-center space-x-4 mb-4 sm:mb-0">
+                        <div class="w-12 h-12 rounded-full bg-primary bg-opacity-10 flex items-center justify-center text-primary">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 4h-2V3a1 1 0 00-2 0v1H9V3a1 1 0 00-2 0v1H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zm-1 16H6V10h12v10zM12 8a1 1 0 100-2 1 1 0 000 2z"/></svg>
+                        </div>
+                        <div>
+                            <p class="font-bold text-xl text-text-dark">Upcoming Events</p>
+                            <p class="text-text-medium">Workshops, seminars, and hackathons.</p>
+                        </div>
+                    </div>
+                    <a href="#" class="px-6 py-2 rounded-full font-semibold text-white cta-gradient">
+                        View All Events
+                    </a>
+                </div>
+
+                <div class="community-card flex flex-col sm:flex-row items-center justify-between p-6">
+                    <div class="text-left flex items-center space-x-4 mb-4 sm:mb-0">
+                        <div class="w-12 h-12 rounded-full bg-accent bg-opacity-10 flex items-center justify-center text-accent">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 2a1 1 0 011-1h4a1 1 0 011 1v2h2a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2h2V2zm6 2H9v1h6V4zM5 7h14v12H5V7zm5 4a1 1 0 100 2h4a1 1 0 100-2h-4z"/></svg>
+                        </div>
+                        <div>
+                            <p class="font-bold text-xl text-text-dark">Suggestion Corner</p>
+                            <p class="text-text-medium">Anonymous feedback to improve the association.</p>
+                        </div>
+                    </div>
+                    <a href="#" class="px-6 py-2 rounded-full font-semibold text-white cta-gradient">
+                        Submit an Idea
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pt-20 pb-24 text-center footer-cta relative z-0 mt-12">
+        <h2 class="text-4xl sm:text-5xl font-extrabold mb-4">
+            Ready to Accelerate Your ECE Journey?
+        </h2>
+        <p class="text-xl max-w-2xl mx-auto mb-10 opacity-95">
+            Become an active part of our growing community and unlock your full potential.
+        </p>
+        <div class="flex justify-center space-x-6">
+            <a href="#" class="px-8 py-3 rounded-full font-bold text-lg text-secondary bg-white hover:bg-gray-100 transition duration-300 shadow-lg">
+                Get Started Today
+            </a>
+            <a href="#" class="px-8 py-3 rounded-full font-bold text-lg border-2 border-white hover:bg-white hover:text-secondary transition duration-300 shadow-lg">
+                Contact Us
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

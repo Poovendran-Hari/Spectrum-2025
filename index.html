@@ -3,682 +3,1210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New College Event | Single-Step Form</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>ECE Event Creator | Draft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     
-    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Apply Poppins to all elements */
-        body {
+        /* Base Tailwind Directives */
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css');
+        
+        /* Custom Components (from styles.css) */
+        .font-poppins {
             font-family: 'Poppins', sans-serif;
         }
-        /* Custom styles for animations and components */
-        .animate-fadeIn {
-            animation: fadeIn 0.5s ease-out;
+
+        .btn-primary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #2563EB; /* blue-600 */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 150ms;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .btn-primary:hover {
+            background-color: #1D4ED8; /* blue-700 */
         }
-        .tag-pill {
-            @apply inline-flex items-center text-sm bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full mr-2 mb-2 font-medium transition-colors hover:bg-indigo-200;
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
-        .input-error {
-            @apply border-red-500 ring-2 ring-red-500/50;
+
+        .btn-secondary {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #E5E7EB; /* gray-200 */
+            color: #374151; /* gray-700 */
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: background-color 150ms;
         }
-        .input-success {
-            @apply border-green-500 ring-2 ring-green-500/50;
+        .btn-secondary:hover {
+            background-color: #D1D5DB; /* gray-300 */
         }
-        /* Toggle Switch Styling */
-        .form-switch {
-            @apply relative inline-block w-12 h-6 mr-2 align-middle select-none transition duration-200 ease-in;
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
-        .form-switch input {
-            @apply absolute opacity-0 w-0 h-0;
+
+        .btn-ghost {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4B5563; /* gray-600 */
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: background-color 150ms;
         }
-        .form-switch .slider {
-            @apply block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer;
+        .btn-ghost:hover {
+            background-color: #F3F4F6; /* gray-100 */
         }
-        .form-switch .slider:before {
-            content: "";
-            @apply block w-6 h-6 bg-white rounded-full absolute top-0 left-0 transition-transform duration-300 shadow;
+
+        .form-group {
+            margin-bottom: 1rem;
         }
-        .form-switch input:checked + .slider {
-            @apply bg-green-600;
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151; /* gray-700 */
+            margin-bottom: 0.25rem;
         }
-        .form-switch input:checked + .slider:before {
-            transform: translateX(24px);
+
+        .form-group input:not([type="radio"]):not([type="checkbox"]),
+        .form-group select,
+        .file-input {
+            width: 100%;
+            border: 1px solid #D1D5DB; /* gray-300 */
+            border-radius: 0.375rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            padding: 0.5rem;
+            transition: border-color 150ms, box-shadow 150ms;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #3B82F6; /* blue-500 */
+            --tw-ring-color: #3B82F6;
+            box-shadow: 0 0 0 1px #3B82F6;
+            outline: 2px solid transparent;
+        }
+        
+        .form-group .error-message {
+            font-size: 0.75rem;
+            color: #EF4444; /* red-500 */
+            margin-top: 0.25rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6B7280; /* gray-500 */
+            border-bottom-width: 2px;
+            border-color: transparent;
+            transition: color 150ms, border-color 150ms;
+            display: flex;
+            align-items: center;
+        }
+
+        .tab:hover {
+            color: #2563EB; /* blue-600 */
+            border-color: #93C5FD; /* blue-300 */
+        }
+
+        .tab-active {
+            color: #2563EB; /* blue-600 */
+            border-color: #2563EB;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1F2937; /* gray-800 */
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #E5E7EB;
+            padding-bottom: 0.5rem;
+        }
+        
+        .radio-label {
+            display: inline-flex;
+            align-items: center;
+        }
+        .radio-label input[type="radio"] {
+            height: 1rem;
+            width: 1rem;
+            color: #2563EB;
+            border-color: #D1D5DB;
+            margin-right: 0.5rem;
+        }
+        
+        /* Tag Styles */
+        .tag-item {
+            background-color: #DBEAFE; /* blue-100 */
+            color: #1E40AF; /* blue-800 */
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px; /* full */
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .tag-remove {
+            cursor: pointer;
+            color: #2563EB;
+        }
+        .tag-remove:hover {
+            color: #1E40AF;
+        }
+        
+        /* Mobile Preview Styling */
+        @media (max-width: 1023px) {
+            #event-preview-content {
+                transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+                overflow: hidden;
+            }
+            #event-preview-content.hidden-mobile {
+                max-height: 0;
+                opacity: 0;
+            }
+            #event-preview-content:not(.hidden-mobile) {
+                max-height: 1000px; /* Large enough value */
+                opacity: 1;
+            }
         }
     </style>
-    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-gray-100 antialiased min-h-screen flex">
+<body class="min-h-screen bg-gray-50 font-poppins text-gray-800">
 
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-gray-900 text-white transition-transform duration-300 ease-in-out transform -translate-x-full lg:translate-x-0 shadow-2xl">
-        <div class="h-full flex flex-col">
-            <div class="p-6 flex-shrink-0">
-                <p class="text-2xl font-bold text-indigo-400">Campus<span class="text-white">Events</span></p>
+    <div id="toast-container" class="fixed bottom-4 right-4 z-50 space-y-2"></div>
+    <div id="snackbar-container" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50"></div>
+
+    <div class="container mx-auto p-4 lg:p-8">
+        <header class="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between">
+            <div id="breadcrumbs" class="text-sm text-gray-500 hidden sm:block">
+                ECE Association / <span class="font-medium text-gray-700">New Event Draft</span>
             </div>
-            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                <a href="/dashboard" class="group flex items-center px-4 py-2 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-all">
-                    <i data-lucide="home" class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-300 transition-colors"></i>
-                    Dashboard
-                </a>
-                <a href="/create-event" class="group flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-indigo-600 text-white transition-all shadow-lg shadow-indigo-600/30">
-                    <i data-lucide="calendar-plus" class="mr-3 h-5 w-5 transition-colors"></i>
-                    Create Event
-                </a>
-                <a href="/events" class="group flex items-center px-4 py-2 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-all">
-                    <i data-lucide="calendar" class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-300 transition-colors"></i>
-                    My Events
-                </a>
-                <a href="/settings" class="group flex items-center px-4 py-2 text-sm font-medium rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-all">
-                    <i data-lucide="cog" class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-300 transition-colors"></i>
-                    Settings
-                </a>
-            </nav>
-        </div>
-    </aside>
-
-    <div id="sidebar-overlay" class="fixed inset-0 z-40 bg-black opacity-50 hidden lg:hidden" aria-hidden="true"></div>
-
-    <div class="flex-1 flex flex-col lg:ml-64 transition-all duration-300">
-
-        <header class="p-4 bg-white border-b border-gray-200 sticky top-0 z-30 flex justify-between items-center shadow-md">
-            <div class="flex items-center">
-                <button id="menu-toggle" class="lg:hidden p-2 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md mr-4" aria-label="Open sidebar">
-                    <i data-lucide="menu" class="h-6 w-6"></i>
+            <div id="header-actions" class="space-x-2 mt-4 sm:mt-0 flex">
+                <span id="autosave-timestamp" class="text-xs text-gray-400 self-center hidden lg:block"></span>
+                <button type="button" id="save-draft-btn" class="btn-ghost">
+                    <i data-lucide="save" class="w-4 h-4 mr-1"></i> Save Draft
                 </button>
-                <div>
-                    <h1 class="text-2xl font-semibold text-gray-900">Create a New College Event</h1>
-                    <p class="text-sm text-gray-500 hidden sm:block">Organize and publish campus events with ease.</p>
-                </div>
-            </div>
-            
-            <div class="flex space-x-3">
-                <button type="button" class="text-sm px-4 py-2 border rounded-full text-gray-700 border-gray-300 hover:bg-gray-100 transition-transform duration-200 hover:scale-105" aria-label="Save draft">
-                    <i data-lucide="bookmark" class="h-4 w-4 inline-block mr-1"></i>
-                    Save Draft
-                </button>
-                <button type="submit" form="event-form" class="text-sm px-4 py-2 bg-indigo-600 text-white rounded-full font-medium hover:bg-indigo-700 transition-transform duration-200 hover:scale-105 shadow-md shadow-indigo-500/50" aria-label="Publish event">
-                    <i data-lucide="send" class="h-4 w-4 inline-block mr-1"></i>
+                <button type="button" id="publish-btn" class="btn-primary">
+                    <span id="publish-spinner" class="hidden animate-spin h-4 w-4 mr-1 border-2 border-white border-t-transparent rounded-full"></span>
                     Publish
                 </button>
             </div>
         </header>
 
-        <main class="flex-1 flex min-h-0">
-            
-            <section class="flex-1 p-4 md:p-8 overflow-y-auto max-w-full xl:max-w-4xl">
-                <form id="event-form" class="space-y-8">
-                    <div class="bg-white shadow-xl rounded-xl p-6 md:p-8">
-                        
-                        <h2 class="text-3xl font-bold text-gray-900 mb-6 flex items-center">
-                            <i data-lucide="file-text" class="h-7 w-7 mr-3 text-indigo-600"></i> Event Submission Form
-                        </h2>
-                        <p class="text-gray-600 mb-8 border-b pb-4">Fill out the following sections to create and publish your college event.</p>
+        <main class="lg:grid lg:grid-cols-3 lg:gap-8">
 
-                        <div id="event-info-section" class="space-y-10">
-                            
-                            <fieldset class="border border-gray-200 p-5 rounded-xl space-y-4">
-                                <legend class="text-lg font-semibold px-2 text-gray-700 flex items-center"><i data-lucide="layout-grid" class="h-5 w-5 mr-2 text-indigo-500"></i> Basic Details</legend>
-                                
-                                <div>
-                                    <label for="event-title" class="block text-sm font-medium text-gray-700">Event Title <span class="text-red-500">*</span></label>
-                                    <input type="text" id="event-title" name="title" placeholder="e.g. AI Workshop 2025" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+            <div class="lg:col-span-2">
+                <nav id="multi-step-tabs" class="mb-6 border-b border-gray-200 flex">
+                    <a href="#step-1" id="tab-1" class="tab tab-active">
+                        <i data-lucide="info" class="w-4 h-4 mr-2"></i> Step 1: Event Info
+                    </a>
+                    <a href="#step-2" id="tab-2" class="tab">
+                        <i data-lucide="ticket" class="w-4 h-4 mr-2"></i> Step 2: Reg & Tickets
+                    </a>
+                </nav>
+
+                <form id="event-creation-form" class="space-y-6 bg-white p-6 rounded-lg shadow-md">
+                    
+                    <section id="step-1" data-step="1" class="step-content">
+                        <h2 class="section-title">Event Basics</h2>
+                        
+                        <div class="form-group">
+                            <label for="event-title">Title <span class="text-red-500">*</span></label>
+                            <input type="text" id="event-title" name="title" maxlength="120" placeholder="e.g., ECE TechTalk: VLSI Trends">
+                            <div class="char-counter text-right text-xs text-gray-500">0/120</div>
+                            <p class="error-message"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="event-description">Description <span class="text-red-500">*</span></label>
+                            <div class="border rounded-md">
+                                <div id="editor-toolbar" class="flex p-2 space-x-2 border-b bg-gray-50">
+                                    <button type="button" data-command="bold" title="Bold (Ctrl+B)">
+                                        <i data-lucide="bold" class="w-4 h-4"></i>
+                                    </button>
+                                    <button type="button" data-command="italic" title="Italic (Ctrl+I)">
+                                        <i data-lucide="italic" class="w-4 h-4"></i>
+                                    </button>
+                                    <button type="button" data-command="insertUnorderedList" title="Bullet List">
+                                        <i data-lucide="list" class="w-4 h-4"></i>
+                                    </button>
+                                    <button type="button" data-command="createLink" title="Hyperlink">
+                                        <i data-lucide="link" class="w-4 h-4"></i>
+                                    </button>
                                 </div>
-                                
-                                <div class="grid sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label for="event-path" class="block text-sm font-medium text-gray-700">Event Path (URL Slug) <span class="text-red-500">*</span></label>
-                                        <div class="flex rounded-lg shadow-sm">
-                                            <span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">/events/</span>
-                                            <input type="text" id="event-path" name="path" placeholder="my-ai-workshop" required oninput="sanitizePath(event)" class="flex-1 min-w-0 block w-full px-4 py-2 border border-gray-300 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                                        </div>
-                                        <p id="path-feedback" class="text-xs text-gray-500 mt-1">URL: [Your College Site]/events/<span class="font-semibold text-indigo-600" id="live-path">event-path-here</span></p>
-                                    </div>
-                                    <div>
-                                        <label for="event-category" class="block text-sm font-medium text-gray-700">Category <span class="text-red-500">*</span></label>
-                                        <select id="event-category" name="category" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all bg-white">
-                                            <option value="" disabled selected>Select a category</option>
-                                            <option value="Technical">Technical 🧑‍💻</option>
-                                            <option value="Cultural">Cultural 🎨</option>
-                                            <option value="Sports">Sports ⚽</option>
-                                            <option value="Workshop">Workshop 🛠️</option>
-                                            <option value="Seminar">Seminar 🎤</option>
-                                            <option value="Festival">Festival 🎉</option>
+                                <div id="event-description-editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Event Description" class="min-h-[150px] p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" data-placeholder="Describe the event, agenda, and speakers..."></div>
+                            </div>
+                            <div class="char-counter text-right text-xs text-gray-500">0/2000</div>
+                            <p class="error-message"></p>
+                        </div>
+
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label for="start-date">Start Date & Time <span class="text-red-500">*</span></label>
+                                <input type="datetime-local" id="start-date" name="start_date">
+                                <p class="error-message"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="end-date">End Date & Time <span class="text-red-500">*</span></label>
+                                <input type="datetime-local" id="end-date" name="end_date">
+                                <p class="error-message"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="block mb-2">Location Type <span class="text-red-500">*</span></label>
+                            <div class="flex space-x-4">
+                                <label class="radio-label">
+                                    <input type="radio" name="location-type" value="offline" checked> Offline
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="location-type" value="online"> Online
+                                </label>
+                            </div>
+                            <div id="location-fields" class="mt-3">
+                                <div id="offline-field" class="form-group">
+                                    <label for="venue">Venue Address <span class="text-red-500">*</span></label>
+                                    <input type="text" id="venue" name="venue" placeholder="e.g., Seminar Hall A, ECE Block">
+                                    <p class="error-message"></p>
+                                </div>
+                                <div id="online-field" class="form-group hidden">
+                                    <label for="online-url">Online URL (e.g., Zoom/Google Meet) <span class="text-red-500">*</span></label>
+                                    <input type="url" id="online-url" name="online_url" placeholder="https://meet.google.com/...">
+                                    <p class="error-message"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tags-input">Tags (Max 5)</label>
+                            <div id="tags-container" class="border p-2 rounded-md flex flex-wrap gap-2 items-center min-h-[40px] focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500 transition duration-150">
+                                <input type="text" id="tags-input" class="flex-grow focus:outline-none p-0 border-none" placeholder="Add a tag (e.g., AI, Workshop)" aria-label="Tags input">
+                            </div>
+                            <p class="error-message"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="poster-upload">Poster Image (Required, ≤5MB) <span class="text-red-500">*</span></label>
+                            <input type="file" id="poster-upload" name="poster" accept="image/*" class="file-input">
+                            <div id="poster-preview" class="mt-2 h-40 w-40 border rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 text-sm overflow-hidden hidden">
+                                <img id="preview-poster-img" src="" alt="Poster Preview" class="object-cover w-full h-full hidden">
+                                <i data-lucide="image" class="w-10 h-10 text-gray-400"></i>
+                            </div>
+                            <p class="error-message"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="brochure-upload">Brochure (Optional, PDF ≤10MB)</label>
+                            <input type="file" id="brochure-upload" name="brochure" accept="application/pdf" class="file-input">
+                            <p class="error-message"></p>
+                        </div>
+
+                    </section>
+                    
+                    <section id="step-2" data-step="2" class="step-content hidden">
+                        <h2 class="section-title">Registration & Tickets</h2>
+
+                        <div class="form-group">
+                            <label class="block mb-2">Event Type</label>
+                            <div class="flex space-x-4">
+                                <label class="radio-label">
+                                    <input type="radio" name="recurrence-type" value="single" checked> Single Event
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="recurrence-type" value="recurring"> Recurring Event
+                                </label>
+                            </div>
+                            <div id="recurrence-options" class="mt-3 p-3 border rounded-md hidden">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="form-group">
+                                        <label for="recurrence-frequency">Repeats</label>
+                                        <select id="recurrence-frequency" name="recurrence_frequency">
+                                            <option value="daily">Daily</option>
+                                            <option value="weekly">Weekly</option>
+                                            <option value="monthly">Monthly</option>
                                         </select>
                                     </div>
-                                </div>
-                                
-                                <div>
-                                    <label for="event-description" class="block text-sm font-medium text-gray-700">Description <span class="text-red-500">*</span></label>
-                                    <textarea id="event-description" name="description" placeholder="Brief description of the event..." rows="5" required maxlength="500" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"></textarea>
-                                    <p class="text-xs text-right text-gray-500 mt-1">
-                                        <span id="char-count">0</span>/500 characters
-                                    </p>
-                                </div>
-                                
-                                <div>
-                                    <label for="event-tags-input" class="block text-sm font-medium text-gray-700 mb-2">Tags (Press Enter to add, Max 5)</label>
-                                    <div class="flex flex-wrap items-center border border-gray-300 rounded-lg p-2 focus-within:ring-2 focus-within:ring-indigo-500 transition-all">
-                                        <div id="tags-container" class="flex flex-wrap"></div>
-                                        <input type="text" id="event-tags-input" name="tags-input" placeholder="e.g. AI, Coding, Workshop" maxlength="20" class="flex-grow min-w-0 bg-transparent px-2 py-1 focus:outline-none" onkeydown="handleTagInput(event)" aria-label="Enter tags for the event">
-                                        <input type="hidden" id="event-tags-hidden" name="tags">
+                                    <div class="form-group">
+                                        <label for="recurrence-interval">Interval</label>
+                                        <input type="number" id="recurrence-interval" name="recurrence_interval" min="1" value="1">
                                     </div>
                                 </div>
-                            </fieldset>
-
-                            <fieldset class="border border-gray-200 p-5 rounded-xl space-y-4">
-                                <legend class="text-lg font-semibold px-2 text-gray-700 flex items-center"><i data-lucide="clock" class="h-5 w-5 mr-2 text-indigo-500"></i> Schedule & Location</legend>
-                                
-                                <div class="grid sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label for="event-start" class="block text-sm font-medium text-gray-700">Start Date & Time <span class="text-red-500">*</span></label>
-                                        <input type="datetime-local" id="event-start" name="start" required oninput="validateTimeRange()" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                                        <p id="start-error" class="text-xs text-red-500 mt-1 hidden">Start time cannot be in the past.</p>
-                                    </div>
-                                    <div>
-                                        <label for="event-end" class="block text-sm font-medium text-gray-700">End Date & Time <span class="text-red-500">*</span></label>
-                                        <input type="datetime-local" id="event-end" name="end" required oninput="validateTimeRange()" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                                        <p id="end-error" class="text-xs text-red-500 mt-1 hidden">End time must be after the start time.</p>
-                                    </div>
-                                </div>
-
-                                <div class="pt-2 border-t border-gray-100 space-y-3">
-                                    <label class="block text-sm font-medium text-gray-700">Event Format <span class="text-red-500">*</span></label>
-                                    <div class="flex gap-6">
-                                        <label class="inline-flex items-center text-gray-900 font-medium cursor-pointer">
-                                            <input type="radio" name="locationType" value="online" required checked onchange="toggleLocationFields('online')" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                            <span class="ml-2 flex items-center"><i data-lucide="globe" class="h-5 w-5 mr-1 text-indigo-500"></i> Online Event</span>
+                                <div class="form-group mt-3">
+                                    <label>Ends</label>
+                                    <div class="flex flex-wrap items-center space-x-4 space-y-2 md:space-y-0">
+                                        <label class="radio-label flex items-center">
+                                            <input type="radio" name="recurrence-end" value="after" checked> After
+                                            <input type="number" name="recurrence_end_after" id="recurrence_end_after" class="w-20 ml-2" min="1" value="6"> occurrences
                                         </label>
-                                        <label class="inline-flex items-center text-gray-900 font-medium cursor-pointer">
-                                            <input type="radio" name="locationType" value="offline" required onchange="toggleLocationFields('offline')" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                            <span class="ml-2 flex items-center"><i data-lucide="map-pin" class="h-5 w-5 mr-1 text-indigo-500"></i> Offline Event</span>
+                                        <label class="radio-label flex items-center">
+                                            <input type="radio" name="recurrence-end" value="until"> Until
+                                            <input type="date" name="recurrence_end_until" id="recurrence_end_until" class="ml-2">
                                         </label>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
 
-                                <div id="location-fields-container" class="space-y-4">
-                                    <div id="online-field">
-                                        <label for="event-location-url" class="block text-sm font-medium text-gray-700">Meeting/Streaming URL <span class="text-red-500">*</span></label>
-                                        <input type="url" id="event-location-url" name="locationURL" placeholder="https://zoom.us/join/..." required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                                    </div>
-                                    <div id="offline-field" class="hidden">
-                                        <label for="event-venue" class="block text-sm font-medium text-gray-700">Venue Address / Room <span class="text-red-500">*</span></label>
-                                        <input type="text" id="event-venue" name="locationVenue" placeholder="e.g. Main Hall, Block A" required disabled class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                                    </div>
-                                </div>
-                            </fieldset>
-                            
-                            <fieldset class="border border-gray-200 p-5 rounded-xl space-y-4">
-                                <legend class="text-lg font-semibold px-2 text-gray-700 flex items-center"><i data-lucide="image" class="h-5 w-5 mr-2 text-indigo-500"></i> Media Upload</legend>
-                                
-                                <div class="space-y-1">
-                                    <label for="event-poster" class="block text-sm font-medium text-gray-700">Event Poster (Max 5MB) <span class="text-red-500">*</span></label>
-                                    <input type="file" id="event-poster" name="poster" accept=".png, .jpg, .jpeg" required onchange="previewPoster(event)" class="w-full text-sm text-gray-500
-                                        file:mr-4 file:py-2 file:px-4
-                                        file:rounded-full file:border-0
-                                        file:text-sm file:font-semibold
-                                        file:bg-indigo-600 file:text-white
-                                        hover:file:bg-indigo-700 transition-colors
-                                        cursor-pointer">
-                                    <p class="text-xs text-gray-500">Aspect ratio: 16:9 recommended. Appears in Live Preview.</p>
-                                </div>
+                        <h3 class="subsection-title">Registration Settings</h3>
+                        <div class="grid sm:grid-cols-2 gap-4">
+                            <div class="form-group">
+                                <label for="capacity">Max Participants <span class="text-red-500">*</span></label>
+                                <input type="number" id="capacity" name="capacity" min="1" max="9999" value="250">
+                                <p class="error-message"></p>
+                            </div>
+                            <div class="form-group">
+                                <label for="deadline">Registration Deadline <span class="text-red-500">*</span></label>
+                                <input type="datetime-local" id="deadline" name="registration_deadline">
+                                <p class="error-message"></p>
+                            </div>
+                        </div>
 
-                                <div class="grid sm:grid-cols-2 gap-4">
-                                    <div class="space-y-1">
-                                        <label for="event-approval-form" class="block text-sm font-medium text-gray-700">Approval Form (PDF) <span class="text-red-500">*</span></label>
-                                        <input type="file" id="event-approval-form" name="approvalForm" accept=".pdf" required class="w-full text-sm text-gray-500
-                                            file:mr-4 file:py-2 file:px-4
-                                            file:rounded-full file:border-0
-                                            file:text-sm file:font-semibold
-                                            file:bg-gray-700 file:text-white
-                                            hover:file:bg-gray-800 transition-colors
-                                            cursor-pointer">
-                                    </div>
-                                    <div class="space-y-1">
-                                        <label for="event-brochure" class="block text-sm font-medium text-gray-700">Brochure (PDF, Optional)</label>
-                                        <input type="file" id="event-brochure" name="brochure" accept=".pdf" class="w-full text-sm text-gray-500
-                                            file:mr-4 file:py-2 file:px-4
-                                            file:rounded-full file:border-0
-                                            file:text-sm file:font-semibold
-                                            file:bg-indigo-100 file:text-indigo-700
-                                            hover:file:bg-indigo-200 transition-colors
-                                            cursor-pointer">
-                                    </div>
-                                </div>
-                            </fieldset>
-                            
-                            <fieldset class="border border-gray-200 p-5 rounded-xl space-y-4">
-                                <legend class="text-lg font-semibold px-2 text-gray-700 flex items-center"><i data-lucide="ticket" class="h-5 w-5 mr-2 text-indigo-500"></i> Registration Setup</legend>
+                        <div class="form-group flex items-center space-x-4">
+                            <label class="switch-label relative inline-block w-11 h-6">
+                                <input type="checkbox" id="waitlist-toggle" name="waitlist" class="opacity-0 w-0 h-0">
+                                <span class="slider absolute cursor-pointer top-0 left-0 right-0 bottom-0 bg-gray-300 transition-colors duration-400 rounded-full">
+                                    <span class="absolute content-[''] h-4 w-4 left-1 bottom-1 bg-white transition-transform duration-400 rounded-full shadow-md"></span>
+                                </span>
+                            </label>
+                            <label for="waitlist-toggle" class="text-sm cursor-pointer">Enable Waitlist (after max capacity is reached)</label>
+                        </div>
+                        <style>
+                            /* Switch Toggle CSS */
+                            .switch-label input:checked + .slider { background-color: #2563EB; }
+                            .switch-label input:checked + .slider > span { transform: translateX(20px); }
+                        </style>
 
-                                <div class="grid sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label for="max-participants" class="block text-sm font-medium text-gray-700">Max Participants <span class="text-red-500">*</span></label>
-                                        <input type="number" id="max-participants" name="maxParticipants" placeholder="e.g. 300" min="1" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                                    </div>
-                                    <div>
-                                        <label for="registration-deadline" class="block text-sm font-medium text-gray-700">Registration Deadline <span class="text-red-500">*</span></label>
-                                        <input type="date" id="registration-deadline" name="deadline" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                                    </div>
-                                </div>
+                        <h3 class="subsection-title mt-6">Ticket Tiers</h3>
+                        <div id="ticket-tiers-container" class="space-y-4">
+                            </div>
 
-                                <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg border border-gray-200">
-                                    <label for="waitlist-toggle" class="text-sm font-medium text-gray-900 flex items-center">
-                                        <i data-lucide="list-checks" class="h-5 w-5 mr-2 text-green-700"></i> Enable Waitlist
-                                    </label>
-                                    <div class="form-switch">
-                                        <input type="checkbox" id="waitlist-toggle" name="waitlistEnabled" class="sr-only" aria-checked="false">
-                                        <span class="slider"></span>
-                                    </div>
-                                </div>
-                                
-                                <div>
-                                    <label for="registration-url" class="block text-sm font-medium text-gray-700">External Registration URL (Optional)</label>
-                                    <input type="url" id="registration-url" name="registrationUrl" placeholder="If using external system, provide URL" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                                </div>
+                        <button type="button" id="add-tier-btn" class="mt-4 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition duration-150 flex items-center justify-center">
+                            <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Add Ticket Tier
+                        </button>
+                    </section>
 
-                                <fieldset class="border border-gray-200 p-4 rounded-xl space-y-4">
-                                    <legend class="text-lg font-semibold px-2 text-gray-700">Participant Details Collected</legend>
+                    <div class="flex justify-between pt-4 border-t border-gray-200">
+                        <button type="button" id="prev-step-btn" class="btn-secondary" disabled>
+                            <i data-lucide="chevron-left" class="w-4 h-4 mr-1"></i> Previous
+                        </button>
+                        <button type="button" id="next-step-btn" class="btn-primary">
+                            Next <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </button>
+                    </div>
 
-                                    <div class="bg-indigo-50 p-3 rounded-lg text-sm text-gray-800 font-medium border border-indigo-200 flex flex-wrap gap-x-4">
-                                        <p><i data-lucide="check-circle" class="h-4 w-4 inline-block mr-1 text-indigo-600"></i> **Full Name** (Required)</p>
-                                        <p><i data-lucide="check-circle" class="h-4 w-4 inline-block mr-1 text-indigo-600"></i> **Email Address** (Required)</p>
-                                    </div>
+                </form>
+            </div>
 
-                                    <div class="grid sm:grid-cols-2 gap-4">
-                                        <div class="flex items-center">
-                                            <input type="checkbox" id="field-student-id" name="collectStudentId" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                            <label for="field-student-id" class="ml-2 block text-sm text-gray-900">Student ID</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input type="checkbox" id="field-major" name="collectMajor" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                            <label for="field-major" class="ml-2 block text-sm text-gray-900">Major/Department</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input type="checkbox" id="field-phone" name="collectPhone" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                            <label for="field-phone" class="ml-2 block text-sm text-gray-900">Phone Number</label>
-                                        </div>
-                                        <div class="flex items-center">
-                                            <input type="checkbox" id="field-dietary" name="collectDietary" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                            <label for="field-dietary" class="ml-2 block text-sm text-gray-900">Dietary Needs/Allergies</label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="pt-2 border-t border-gray-100">
-                                        <label for="custom-question" class="block text-sm font-medium text-gray-700">Custom Question (Optional)</label>
-                                        <input type="text" id="custom-question" name="customQuestion" placeholder="e.g. What is your favourite programming language?" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
-                                    </div>
-                                </fieldset>
-                            </fieldset>
+            <aside id="preview-sidebar" class="lg:col-span-1 mt-8 lg:mt-0">
+                <div class="sticky lg:top-8 p-4 border rounded-lg bg-white shadow-xl">
+                    <h3 class="text-lg font-semibold mb-3 border-b pb-2">Event Preview</h3>
+                    
+                    <button id="mobile-preview-toggle" class="lg:hidden btn-secondary mb-3 w-full" data-state="collapsed" aria-expanded="false" aria-controls="event-preview-content">
+                        Show Preview
+                    </button>
 
+                    <div id="event-preview-content" class="space-y-4 hidden-mobile lg:block" aria-live="polite">
+                        <div id="preview-poster" class="h-40 w-full bg-gray-200 rounded-lg mb-3 overflow-hidden flex items-center justify-center">
+                            <img id="preview-poster-img-sidebar" src="" alt="Poster Preview" class="object-cover w-full h-full hidden">
+                            <i data-lucide="image" class="w-10 h-10 text-gray-400" id="poster-placeholder-icon"></i>
                         </div>
                         
-                        <div class="flex justify-end pt-8 border-t border-gray-200 mt-10">
-                            <button type="submit" class="px-8 py-3 bg-green-600 text-white rounded-full font-semibold hover:bg-green-700 transition-transform duration-200 hover:scale-105 shadow-md shadow-green-500/50" aria-label="Submit and publish event">
-                                <i data-lucide="check-square" class="h-5 w-5 inline-block mr-2"></i> Review & Publish Event
-                            </button>
+                        <div id="preview-skeleton" class="animate-pulse space-y-3 hidden">
+                            <div class="h-6 bg-gray-200 rounded w-full"></div>
+                            <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
                         </div>
-                    </div>
-                </form>
-                
-                <footer class="text-center text-sm text-gray-400 py-6 mt-8">
-                    &copy; 2025 CampusEvents | 
-                    <a href="/privacy" class="hover:text-gray-600 transition-colors">Privacy Policy</a> | 
-                    <a href="/terms" class="hover:text-gray-600 transition-colors">Terms</a>
-                </footer>
-            </section>
 
-            <aside id="preview-panel" class="hidden xl:block w-1/3 bg-gray-50 border-l border-gray-200 p-6 overflow-y-auto sticky top-20 h-[calc(100vh-80px)]">
-                <div class="sticky top-0 pb-4 bg-gray-50">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                        <i data-lucide="eye" class="h-5 w-5 mr-2 text-indigo-600"></i>
-                        Live Event Preview
-                    </h2>
-                    <p class="text-sm text-gray-500">Real-time visualization of your event card.</p>
-                </div>
-                
-                <div id="event-card-preview" class="mt-4 bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl border-t-4 border-indigo-600">
-                    <div id="preview-poster-container" class="h-40 bg-gray-200 flex items-center justify-center text-gray-500 font-medium overflow-hidden relative">
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/10 to-transparent"></div>
-                        <i data-lucide="image" id="preview-poster-icon" class="h-10 w-10"></i>
-                        <img id="preview-poster-img" src="" alt="Event Poster Preview" class="absolute inset-0 w-full h-full object-cover hidden">
-                    </div>
-                    <div class="p-4">
-                        <p class="text-xs font-semibold uppercase tracking-wider mb-1 transition-colors duration-300" id="preview-category">CATEGORY</p>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2" id="preview-title">Event Title Here</h3>
-                        <p class="text-sm text-gray-600 mb-3 line-clamp-3" id="preview-description">Brief description...</p>
-                        <div class="space-y-1 text-sm text-gray-700 border-t pt-3 mt-3">
-                            <div class="flex items-center">
-                                <i data-lucide="clock" class="h-4 w-4 mr-2 text-indigo-500"></i>
-                                <span id="preview-schedule">TBD</span>
-                            </div>
-                            <div class="flex items-center">
-                                <i data-lucide="map-pin" class="h-4 w-4 mr-2 text-indigo-500"></i>
-                                <span id="preview-location">Online Event</span>
-                            </div>
+                        <h4 id="preview-title" class="text-xl font-bold">New Event Title</h4>
+                        
+                        <div class="text-sm space-y-1">
+                            <p class="flex items-center text-gray-600"><i data-lucide="calendar" class="w-4 h-4 mr-2"></i> <span id="preview-dates">Date & Time TBA</span></p>
+                            <p class="flex items-center text-gray-600"><i data-lucide="map-pin" class="w-4 h-4 mr-2"></i> <span id="preview-location">Location TBA</span></p>
+                            <p id="preview-recurrence" class="flex items-center text-gray-600"><i data-lucide="repeat-2" class="w-4 h-4 mr-2"></i> Single Event</p>
                         </div>
-                        <button class="mt-4 w-full text-center py-2 text-sm font-semibold rounded-full bg-indigo-600 text-white hover:bg-indigo-700 transition-colors hover:shadow-lg hover:shadow-indigo-500/50">
-                            Register Now
-                        </button>
+                        
+                        <div class="border-t pt-3">
+                            <p class="font-semibold mb-2">Ticket Tiers</p>
+                            <ul id="preview-tickets" class="space-y-1 text-sm">
+                                </ul>
+                        </div>
                     </div>
                 </div>
             </aside>
-            
         </main>
     </div>
 
     <script>
-        // --- Global Elements and Configuration ---
-        const form = document.getElementById('event-form');
-        const previewCard = document.getElementById('event-card-preview');
-        const charCount = document.getElementById('char-count');
-        const livePathSpan = document.getElementById('live-path');
+        lucide.createIcons();
+    </script>
+    
+    <script>
+        // app.js
 
-        const livePreview = {
-            title: document.getElementById('preview-title'),
-            description: document.getElementById('preview-description'),
-            category: document.getElementById('preview-category'),
-            schedule: document.getElementById('preview-schedule'),
-            location: document.getElementById('preview-location'),
-            posterImg: document.getElementById('preview-poster-img'),
-            posterIcon: document.getElementById('preview-poster-icon')
-        };
-        
-        const tagsInput = document.getElementById('event-tags-input');
-        const tagsContainer = document.getElementById('tags-container');
-        const tagsHidden = document.getElementById('event-tags-hidden');
-        let activeTags = [];
-        
-        // Conditional Location Fields
-        const onlineField = document.getElementById('online-field');
-        const offlineField = document.getElementById('offline-field');
-        const locationURLInput = document.getElementById('event-location-url');
-        const locationVenueInput = document.getElementById('event-venue');
+        const LOCAL_STORAGE_KEY = 'ece_event_draft';
+        let currentStep = 1;
+        let eventData = {}; // Main object to hold form state
+        let ticketTierCounter = 1; // Used for unique IDs for ticket tiers
+        const MAX_TAGS = 5;
 
-        // Category Color Mapping for Live Styling
-        const categoryColors = {
-            'Technical': { text: 'text-blue-600', border: 'border-blue-600' },
-            'Cultural': { text: 'text-pink-600', border: 'border-pink-600' },
-            'Sports': { text: 'text-green-600', border: 'border-green-600' },
-            'Workshop': { text: 'text-purple-600', border: 'border-purple-600' },
-            'Seminar': { text: 'text-yellow-600', border: 'border-yellow-600' },
-            'Festival': { text: 'text-red-600', border: 'border-red-600' },
-        };
-        
-        // --- Form Submission / Final Validation ---
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            // A final validation check before submission (using the existing logic)
-            if (validateForm()) {
-                alert('Form is valid! Submitting event: ' + form.elements['title'].value);
-                // In a real application, AJAX submission logic would go here
-            } else {
-                alert('Please correct the highlighted errors before submitting.');
-            }
-        });
+        // --- UTILITY FUNCTIONS (TOAST/SNACKBAR) ---
 
-        function validateForm() {
-            // Validate all required fields in the single-step form
-            const requiredFields = form.querySelectorAll('[required]:not([disabled])');
-            let isValid = true;
-            let firstInvalidField = null;
+        /** Shows a transient notification. */
+        function showToast(message, type = 'info', duration = 4000) {
+            const container = document.getElementById('toast-container');
+            const colors = {
+                'success': 'bg-green-500 border-green-700',
+                'error': 'bg-red-500 border-red-700',
+                'info': 'bg-blue-500 border-blue-700',
+            };
+            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'alert-triangle' : 'info';
 
-            requiredFields.forEach(field => {
-                field.classList.remove('input-error');
-
-                if (field.type === 'datetime-local' && field.id.includes('end') && !validateTimeRange(true)) {
-                    isValid = false;
-                } else if (!field.value.trim()) {
-                    field.classList.add('input-error');
-                    if (!firstInvalidField) firstInvalidField = field;
-                    isValid = false;
-                }
-            });
-
-            if (!isValid) {
-                if (firstInvalidField) firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-            return isValid;
-        }
-
-        // --- Location Selector Logic ---
-        function toggleLocationFields(type) {
-            // Set input requirements and visibility based on type
-            const isOnline = type === 'online';
-
-            onlineField.classList.toggle('hidden', !isOnline);
-            offlineField.classList.toggle('hidden', isOnline);
-
-            locationURLInput.required = isOnline;
-            locationURLInput.disabled = !isOnline;
-            locationVenueInput.required = !isOnline;
-            locationVenueInput.disabled = isOnline;
-
-            // Clear disabled field values to prevent incorrect submission data
-            if (isOnline) {
-                locationVenueInput.value = '';
-            } else {
-                locationURLInput.value = '';
-            }
-
-            // Update live preview immediately
-            const currentValue = isOnline ? locationURLInput.value : locationVenueInput.value;
-            updateLocationPreview(currentValue, type);
-        }
-
-        function updateLocationPreview(value, type) {
-            const currentType = document.querySelector('input[name="locationType"]:checked').value;
-            const mapIcon = '<i data-lucide="map-pin" class="h-4 w-4 mr-2 text-indigo-500"></i>';
-            const globeIcon = '<i data-lucide="globe" class="h-4 w-4 mr-2 text-indigo-500"></i>';
+            const toast = document.createElement('div');
+            toast.className = `p-3 rounded-lg text-white shadow-xl ${colors[type]} flex items-center space-x-2 transition-all duration-300 opacity-0 transform translate-x-10`;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.innerHTML = `<i data-lucide="${icon}" class="w-5 h-5"></i><span>${message}</span>`;
             
-            if (currentType === 'online') {
-                livePreview.location.innerHTML = globeIcon + (value ? 'Online via Link' : 'Online Event');
-            } else {
-                livePreview.location.innerHTML = mapIcon + (value ? value : 'Offline Event');
-            }
-            // Re-render lucide icons
-            lucide.createIcons();
+            container.appendChild(toast);
+            lucide.createIcons(); 
+            
+            setTimeout(() => {
+                toast.classList.remove('opacity-0', 'translate-x-10');
+                toast.classList.add('opacity-100', 'translate-x-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-x-10');
+                toast.addEventListener('transitionend', () => toast.remove());
+            }, duration);
         }
 
-        // --- Live Poster Preview Functionality ---
-        function previewPoster(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    livePreview.posterImg.src = e.target.result;
-                    livePreview.posterImg.classList.remove('hidden');
-                    livePreview.posterIcon.classList.add('hidden');
+        /** Shows a persistent notification (e.g., for undo). */
+        function showSnackbar(message, actionText, actionCallback) {
+            const container = document.getElementById('snackbar-container');
+            container.innerHTML = ''; 
+
+            const snackbar = document.createElement('div');
+            snackbar.className = 'bg-gray-800 text-white px-6 py-3 rounded-lg shadow-2xl flex items-center justify-between space-x-4 opacity-0 transform translate-y-full transition-all duration-300';
+            snackbar.setAttribute('role', 'status');
+            snackbar.setAttribute('aria-live', 'polite');
+            snackbar.innerHTML = `
+                <span>${message}</span>
+                ${actionText ? `<button class="text-blue-400 font-semibold hover:text-blue-300 transition" id="snackbar-action">${actionText}</button>` : ''}
+            `;
+
+            container.appendChild(snackbar);
+            
+            setTimeout(() => {
+                snackbar.classList.remove('opacity-0', 'translate-y-full');
+                snackbar.classList.add('opacity-100', 'translate-y-0');
+            }, 50);
+
+            if (actionText) {
+                document.getElementById('snackbar-action').onclick = () => {
+                    actionCallback();
+                    snackbar.remove();
                 };
-                reader.readAsDataURL(file);
-            } else {
-                livePreview.posterImg.src = '';
-                livePreview.posterImg.classList.add('hidden');
-                livePreview.posterIcon.classList.remove('hidden');
             }
+            // Auto-hide after 8 seconds
+            setTimeout(() => {
+                snackbar.classList.add('opacity-0', 'translate-y-full');
+                snackbar.addEventListener('transitionend', () => snackbar.remove());
+            }, 8000);
         }
 
-        // --- Event Path (URL Slug) Sanitization ---
-        function sanitizePath(event) {
-            let value = event.target.value.toLowerCase() // Lowercase
-                                          .replace(/\s+/g, '-')     // Spaces to hyphens
-                                          .replace(/[^a-z0-9-]/g, ''); // Remove special characters except hyphens
+        // --- AUTOSAVE & INITIALIZATION ---
 
-            event.target.value = value;
-            livePathSpan.textContent = value || 'event-path-here';
-        }
-
-        // --- Date/Time Validation and Update ---
-        function validateTimeRange(isFinalCheck = false) {
-            const startInput = form.elements['start'];
-            const endInput = form.elements['end'];
-            const startTime = new Date(startInput.value);
-            const endTime = new Date(endInput.value);
+        function updateAutosaveTimestamp() {
+            const tsEl = document.getElementById('autosave-timestamp');
             const now = new Date();
-            let isValid = true;
+            tsEl.textContent = `Draft saved ${now.toLocaleTimeString()}`;
+        }
 
-            startInput.classList.remove('input-error', 'input-success');
-            endInput.classList.remove('input-error', 'input-success');
-            document.getElementById('start-error').classList.add('hidden');
-            document.getElementById('end-error').classList.add('hidden');
-
-            if (startInput.value) {
-                if (startTime < now) {
-                    startInput.classList.add('input-error');
-                    document.getElementById('start-error').textContent = 'Start time cannot be in the past.';
-                    document.getElementById('start-error').classList.remove('hidden');
-                    isValid = false;
-                } else {
-                    startInput.classList.add('input-success');
-                }
+        function populateComplexFields(data) {
+            // Title Char Counter
+            const titleInput = document.getElementById('event-title');
+            if (titleInput) {
+                titleInput.value = data.title || '';
+                titleInput.closest('.form-group').querySelector('.char-counter').textContent = `${data.title.length}/120`;
             }
 
-            if (startInput.value && endInput.value) {
-                if (endTime <= startTime) {
-                    endInput.classList.add('input-error');
-                    document.getElementById('end-error').textContent = 'End time must be after the start time.';
-                    document.getElementById('end-error').classList.remove('hidden');
-                    isValid = false;
-                } else {
-                    endInput.classList.add('input-success');
-                }
+            // Description Editor
+            const editor = document.getElementById('event-description-editor');
+            if (editor && data.description_html) {
+                editor.innerHTML = data.description_html;
+                editor.closest('.form-group').querySelector('.char-counter').textContent = `${editor.textContent.length}/2000`;
             }
             
-            updateSchedulePreview();
+            // Location Radio Button
+            document.querySelectorAll(`input[name="location-type"][value="${data.location_type}"]`).forEach(radio => {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change')); // Trigger visibility logic
+            });
+
+            // Recurrence Radio Button
+            document.querySelectorAll(`input[name="recurrence-type"][value="${data.recurrence_type}"]`).forEach(radio => {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change'));
+            });
+            
+            // Waitlist Toggle
+            const waitlistToggle = document.getElementById('waitlist-toggle');
+            waitlistToggle.checked = data.waitlist || false;
+            
+            // Tags (Handled by renderTags)
+            // Tickets (Handled by renderTicketFormTiers)
+        }
+
+        function loadDraft() {
+            const draft = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (draft) {
+                const loadedData = JSON.parse(draft);
+                eventData = loadedData;
+                
+                showSnackbar('Draft loaded successfully.', 'Undo', () => {
+                    // Simple undo: revert eventData to initial state and reload form
+                    localStorage.removeItem(LOCAL_STORAGE_KEY);
+                    window.location.reload();
+                });
+                
+                // Populate all fields
+                document.getElementById('event-creation-form').reset(); // Reset first
+                const allInputs = document.querySelectorAll('#event-creation-form input, #event-creation-form select');
+                allInputs.forEach(input => {
+                    const key = input.name || input.id.replace(/-/g, '_');
+                    if (loadedData[key] !== undefined) {
+                        if (input.type === 'checkbox') {
+                            input.checked = loadedData[key];
+                        } else {
+                            input.value = loadedData[key];
+                        }
+                    }
+                });
+
+                populateComplexFields(loadedData);
+            } else {
+                // Initialize with default empty state
+                eventData = {
+                    title: '', description_html: '', tags: [],
+                    location_type: 'offline', venue: '', online_url: '',
+                    capacity: 250, waitlist: false,
+                    recurrence_type: 'single', 
+                    ticket_tiers: [{ id: 1, name: 'General Admission', price: 200, capacity: null }]
+                };
+            }
+            // Ensure ticketTierCounter is high enough if tiers were loaded
+            if (eventData.ticket_tiers && eventData.ticket_tiers.length > 0) {
+                 ticketTierCounter = Math.max(...eventData.ticket_tiers.map(t => t.id), 1);
+            }
+            
+            updateAutosaveTimestamp();
+        }
+
+        function autoSave() {
+            collectFormData();
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(eventData));
+            updateAutosaveTimestamp();
+        }
+
+        function collectFormData() {
+            const form = document.getElementById('event-creation-form');
+            const data = new FormData(form);
+
+            eventData.title = data.get('title') || '';
+            eventData.description_html = document.getElementById('event-description-editor').innerHTML;
+            eventData.start_date = data.get('start_date') || '';
+            eventData.end_date = data.get('end_date') || '';
+            eventData.location_type = data.get('location-type');
+            
+            if (eventData.location_type === 'offline') {
+                eventData.venue = data.get('venue') || '';
+                delete eventData.online_url;
+            } else {
+                eventData.online_url = data.get('online_url') || '';
+                delete eventData.venue;
+            }
+
+            // Step 2 Data
+            eventData.capacity = parseInt(data.get('capacity') || 0);
+            eventData.registration_deadline = data.get('registration_deadline') || '';
+            eventData.waitlist = document.getElementById('waitlist-toggle').checked;
+            
+            eventData.recurrence_type = data.get('recurrence-type');
+            if (eventData.recurrence_type === 'recurring') {
+                eventData.recurrence = {
+                    frequency: data.get('recurrence_frequency'),
+                    interval: parseInt(data.get('recurrence_interval') || 1),
+                    end_condition: data.get('recurrence-end'),
+                    end_after: parseInt(data.get('recurrence_end_after') || 1),
+                    end_until: data.get('recurrence_end_until')
+                };
+            } else {
+                delete eventData.recurrence;
+            }
+        }
+
+        // --- VALIDATION LOGIC ---
+
+        function showValidationError(element, message) {
+            if (element.id === 'event-description-editor') {
+                 element.classList.add('border-red-500'); // RT editor border
+            } else {
+                 element.closest('div[class*="form-group"]').querySelector('input, select')?.classList.add('border-red-500');
+            }
+           
+            const errorEl = element.closest('.form-group')?.querySelector('.error-message');
+            if (errorEl) {
+                errorEl.textContent = message;
+            }
+        }
+
+        function clearValidationError(element) {
+            if (element.id === 'event-description-editor') {
+                 element.classList.remove('border-red-500');
+            } else {
+                 element.closest('div[class*="form-group"]').querySelector('input, select')?.classList.remove('border-red-500');
+            }
+            const errorEl = element.closest('.form-group')?.querySelector('.error-message');
+            if (errorEl) {
+                errorEl.textContent = '';
+            }
+        }
+
+        function validateStep(step) {
+            let isValid = true;
+            const stepEl = document.getElementById(`step-${step}`);
+            collectFormData(); // Ensure eventData is fresh for location/recurrence checks
+            
+            // Function to get the correct element for error display
+            const getErrorElement = (name) => {
+                let el = document.getElementById(name.replace(/_/g, '-'));
+                if (!el) {
+                    if (name === 'venue') el = document.getElementById('venue');
+                    if (name === 'online_url') el = document.getElementById('online-url');
+                }
+                return el || document.querySelector(`[name="${name}"]`) || document.getElementById('event-creation-form');
+            };
+
+            // 1. Title/Description/Dates
+            if (step === 1) {
+                // Title
+                const titleEl = getErrorElement('title');
+                if (!eventData.title) { showValidationError(titleEl, 'Title is required.'); isValid = false; } 
+                else if (eventData.title.length > 120) { showValidationError(titleEl, 'Max 120 characters.'); isValid = false; }
+                else { clearValidationError(titleEl); }
+
+                // Description
+                const descEl = getErrorElement('event-description-editor');
+                const textLength = descEl.textContent.trim().length;
+                if (!descEl.textContent.trim()) { showValidationError(descEl, 'Description is required.'); isValid = false; } 
+                else if (textLength > 2000) { showValidationError(descEl, 'Max 2000 characters.'); isValid = false; }
+                else { clearValidationError(descEl); }
+
+                // Dates
+                const startEl = getErrorElement('start_date');
+                const endEl = getErrorElement('end_date');
+                const startDate = eventData.start_date ? new Date(eventData.start_date) : null;
+                const endDate = eventData.end_date ? new Date(eventData.end_date) : null;
+                const now = new Date();
+                
+                if (!startDate) { showValidationError(startEl, 'Start date is required.'); isValid = false; } 
+                else if (startDate < now) { showValidationError(startEl, 'Cannot be in the past.'); isValid = false; }
+                else { clearValidationError(startEl); }
+
+                if (!endDate) { showValidationError(endEl, 'End date is required.'); isValid = false; } 
+                else if (startDate && endDate <= startDate) { showValidationError(endEl, 'Must be after start date.'); isValid = false; }
+                else { clearValidationError(endEl); }
+                
+                // Location
+                const locationKey = eventData.location_type === 'offline' ? 'venue' : 'online_url';
+                const locationValue = eventData[locationKey];
+                const locationEl = getErrorElement(locationKey);
+                if (!locationValue) {
+                    showValidationError(locationEl, `The ${eventData.location_type} address/URL is required.`);
+                    isValid = false;
+                } else {
+                    clearValidationError(locationEl);
+                }
+                
+                // Poster
+                const posterInput = document.getElementById('poster-upload');
+                if (posterInput.files.length === 0 && !eventData.poster_url) {
+                    showValidationError(posterInput, 'A poster image is required.');
+                    isValid = false;
+                } else {
+                    clearValidationError(posterInput);
+                }
+            } 
+            
+            // 2. Registration/Tickets
+            if (step === 2) {
+                // Capacity
+                const capEl = getErrorElement('capacity');
+                if (eventData.capacity <= 0 || eventData.capacity > 9999 || isNaN(eventData.capacity)) { 
+                    showValidationError(capEl, 'Must be a positive number (max 9999).'); isValid = false; 
+                } else { clearValidationError(capEl); }
+                
+                // Deadline
+                const deadlineEl = getErrorElement('registration_deadline');
+                const deadlineDate = eventData.registration_deadline ? new Date(eventData.registration_deadline) : null;
+                const startDate = eventData.start_date ? new Date(eventData.start_date) : null;
+
+                if (!deadlineDate) { showValidationError(deadlineEl, 'Deadline is required.'); isValid = false; } 
+                else if (startDate && deadlineDate >= startDate) { showValidationError(deadlineEl, 'Must be before start date.'); isValid = false; }
+                else { clearValidationError(deadlineEl); }
+            }
+
             return isValid;
         }
 
-        function updateSchedulePreview() {
-            const startVal = form.elements['start'].value;
-            const endVal = form.elements['end'].value;
-            const formatOptions = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-            
-            if (startVal) {
-                const start = new Date(startVal);
-                let scheduleText = start.toLocaleDateString('en-US', formatOptions);
-                if (endVal) {
-                    const end = new Date(endVal);
-                    scheduleText += ` - ${end.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
+        // --- MULTI-STEP NAVIGATION ---
+
+        function updateStepUI() {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('tab-active');
+                if (tab.id === `tab-${currentStep}`) {
+                    tab.classList.add('tab-active');
                 }
-                livePreview.schedule.textContent = scheduleText;
+            });
+
+            document.querySelectorAll('.step-content').forEach(section => {
+                section.classList.add('hidden');
+                if (parseInt(section.dataset.step) === currentStep) {
+                    section.classList.remove('hidden');
+                }
+            });
+            
+            document.getElementById('prev-step-btn').disabled = currentStep === 1;
+            const nextBtn = document.getElementById('next-step-btn');
+            
+            // At the last step, the "Next" button should not be primary navigation
+            if (currentStep === 2) {
+                nextBtn.textContent = 'Review';
+                nextBtn.classList.remove('btn-primary');
+                nextBtn.classList.add('btn-secondary');
+                nextBtn.disabled = true; 
             } else {
-                livePreview.schedule.textContent = 'TBD';
+                nextBtn.textContent = 'Next';
+                nextBtn.classList.remove('btn-secondary');
+                nextBtn.classList.add('btn-primary');
+                nextBtn.disabled = false;
             }
-        }
-
-
-        // --- Real-time Input Handler (for Title, Description, Category) ---
-        form.addEventListener('input', (e) => {
-            const fieldName = e.target.name;
-            let value = e.target.value;
-
-            switch (fieldName) {
-                case 'title':
-                    livePreview.title.textContent = value || 'Event Title Here';
-                    break;
-                case 'description':
-                    livePreview.description.textContent = value.substring(0, 150) + (value.length > 150 ? '...' : '') || 'Brief description...';
-                    charCount.textContent = value.length; 
-                    break;
-                case 'category':
-                    livePreview.category.textContent = value.toUpperCase() || 'CATEGORY';
-                    Object.values(categoryColors).forEach(style => {
-                        previewCard.classList.remove(style.border);
-                        livePreview.category.classList.remove(style.text);
-                    });
-                    const color = categoryColors[value] || { text: 'text-gray-900', border: 'border-indigo-600' };
-                    previewCard.classList.add(color.border);
-                    livePreview.category.classList.add(color.text);
-                    break;
-                case 'locationURL':
-                case 'locationVenue':
-                    // This handles input on the visible location field
-                    const type = document.querySelector('input[name="locationType"]:checked').value;
-                    updateLocationPreview(value, type);
-                    break;
-            }
-        });
-
-        // --- Tags Input Logic ---
-        function handleTagInput(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                const tagText = tagsInput.value.trim();
-                
-                if (tagText.length > 20) {
-                     tagsInput.classList.add('input-error');
-                     alert('Tag text is too long (max 20 characters).');
-                     setTimeout(() => tagsInput.classList.remove('input-error'), 500);
-                     return;
-                }
-
-                if (tagText && activeTags.length < 5 && !activeTags.includes(tagText)) {
-                    activeTags.push(tagText);
-                    renderTags();
-                    tagsInput.value = '';
-                } else if (activeTags.includes(tagText)) {
-                    tagsInput.classList.add('input-error');
-                    setTimeout(() => tagsInput.classList.remove('input-error'), 500);
-                }
-            }
-            if (event.key === 'Backspace' && tagsInput.value === '' && activeTags.length > 0) {
-                removeTag(activeTags[activeTags.length - 1]);
-            }
-        }
-
-        function removeTag(tagText) {
-            activeTags = activeTags.filter(t => t !== tagText);
-            renderTags();
-        }
-
-        function renderTags() {
-            tagsContainer.innerHTML = '';
-            activeTags.forEach(tag => {
-                const tagEl = document.createElement('span');
-                tagEl.className = 'tag-pill';
-                tagEl.innerHTML = `
-                    ${tag}
-                    <button type="button" class="ml-2 -mr-1 h-4 w-4 text-indigo-700 hover:text-indigo-900 focus:outline-none" onclick="removeTag('${tag}')" aria-label="Remove tag ${tag}">
-                        <i data-lucide="x" class="h-4 w-4"></i>
-                    </button>
-                `;
-                tagsContainer.appendChild(tagEl);
-            });
-            tagsHidden.value = activeTags.join(',');
-            lucide.createIcons();
-        }
-        
-        // --- Initialization ---
-        document.addEventListener('DOMContentLoaded', () => {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            const menuToggle = document.getElementById('menu-toggle');
             
-            menuToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('-translate-x-full');
-                overlay.classList.toggle('hidden');
-            });
+            // Scroll to top of form when navigating
+            document.getElementById('event-creation-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
 
-            overlay.addEventListener('click', () => {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-            });
+        function goToStep(step) {
+            if (step < currentStep) {
+                currentStep = step;
+                updateStepUI();
+            } else if (step > currentStep) {
+                if (validateStep(currentStep)) {
+                    currentStep = step;
+                    updateStepUI();
+                } else {
+                    showToast('Please fix the highlighted errors before proceeding.', 'error');
+                }
+            }
+        }
 
-            // Set initial state for Online Location fields
-            toggleLocationFields('online');
+        // --- REALTIME PREVIEW ---
 
-            // Set initial required fields (not handled by the toggle logic)
-            form.elements['maxParticipants'].setAttribute('required', 'required');
-            form.elements['deadline'].setAttribute('required', 'required');
-            form.elements['event-poster'].setAttribute('required', 'required');
-            form.elements['event-approval-form'].setAttribute('required', 'required');
+        function generateRecurrenceSummary(recurrence) {
+            if (!recurrence || eventData.recurrence_type === 'single') return 'Single Event';
+            
+            let summary = `Repeats ${recurrence.frequency}`;
+            if (recurrence.interval > 1) {
+                summary += ` every ${recurrence.interval}`;
+            }
+            
+            if (recurrence.end_condition === 'after') {
+                summary += `, ends after ${recurrence.end_after} occurrences.`;
+            } else if (recurrence.end_condition === 'until' && recurrence.end_until) {
+                summary += `, until ${new Date(recurrence.end_until).toLocaleDateString()}`;
+            }
+            return summary;
+        }
 
-            // Initial rendering of icons
+        function renderTicketTiers() {
+            const container = document.getElementById('preview-tickets');
+            container.innerHTML = '';
+            
+            if (eventData.ticket_tiers && eventData.ticket_tiers.length > 0) {
+                eventData.ticket_tiers.forEach(tier => {
+                    const price = tier.price === 0 ? 'Free' : `₹${tier.price}`;
+                    const listItem = document.createElement('li');
+                    listItem.className = 'flex justify-between transition-opacity duration-300';
+                    listItem.innerHTML = `
+                        <span>${tier.name}</span>
+                        <span class="font-medium">${price}</span>
+                    `;
+                    container.appendChild(listItem);
+                });
+            } else {
+                 container.innerHTML = '<li class="text-gray-400">No ticket tiers defined.</li>';
+            }
+        }
+
+        function updatePreview() {
+            collectFormData(); 
+
+            // Update Title
+            document.getElementById('preview-title').textContent = eventData.title || 'New Event Title';
+            
+            // Update Dates
+            const start = eventData.start_date ? new Date(eventData.start_date).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : 'Date & Time TBA';
+            document.getElementById('preview-dates').textContent = start;
+            
+            // Update Location
+            let locationText = 'Location TBA';
+            let locationIcon = 'map-pin';
+            if (eventData.location_type === 'offline' && eventData.venue) {
+                locationText = eventData.venue;
+            } else if (eventData.location_type === 'online' && eventData.online_url) {
+                locationText = 'Online Event';
+                locationIcon = 'monitor';
+            }
+            const locationEl = document.getElementById('preview-location');
+            locationEl.textContent = locationText;
+            locationEl.previousElementSibling.setAttribute('data-lucide', locationIcon);
             lucide.createIcons();
+
+            // Update Recurrence Summary
+            document.getElementById('preview-recurrence').textContent = generateRecurrenceSummary(eventData.recurrence);
+
+            // Update Tickets
+            renderTicketTiers();
+        }
+
+        // --- INITIALIZE LISTENERS ---
+
+        function initializeListeners() {
+            // --- Step Navigation Listeners ---
+            document.getElementById('next-step-btn').addEventListener('click', () => goToStep(currentStep + 1));
+            document.getElementById('prev-step-btn').addEventListener('click', () => goToStep(currentStep - 1));
+            document.getElementById('tab-1').addEventListener('click', (e) => { e.preventDefault(); goToStep(1); });
+            document.getElementById('tab-2').addEventListener('click', (e) => { e.preventDefault(); goToStep(2); });
+
+            // --- Header Actions ---
+            document.getElementById('save-draft-btn').addEventListener('click', () => {
+                autoSave();
+                showToast('Draft saved successfully!', 'success');
+            });
+
+            document.getElementById('publish-btn').addEventListener('click', (e) => {
+                const spinner = document.getElementById('publish-spinner');
+                
+                if (!validateStep(1) || !validateStep(2)) {
+                    showToast('Validation failed. See errors in the form.', 'error');
+                    // Automatically jump to the first invalid step
+                    if (!validateStep(1)) goToStep(1); else goToStep(2);
+                    return;
+                }
+
+                // Simulate publish process
+                spinner.classList.remove('hidden');
+                e.target.disabled = true;
+                
+                setTimeout(() => {
+                    spinner.classList.add('hidden');
+                    e.target.disabled = false;
+                    localStorage.removeItem(LOCAL_STORAGE_KEY);
+                    showToast('Event published successfully!', 'success', 6000);
+                    // Reset form and data after publishing
+                    window.location.reload(); 
+                }, 3000);
+            });
+            
+            // --- Form Field Listeners (Input/Change for Autosave & Preview) ---
+            document.getElementById('event-creation-form').addEventListener('input', (e) => {
+                clearTimeout(window.autosaveTimer);
+                window.autosaveTimer = setTimeout(autoSave, 1500);
+
+                if (['title', 'start_date', 'end_date', 'venue', 'online_url', 'recurrence_frequency', 'recurrence_end_after', 'recurrence_end_until', 'location-type', 'recurrence-type'].includes(e.target.name || e.target.id)) {
+                    updatePreview();
+                }
+                
+                // Character counters
+                if (e.target.id === 'event-title') {
+                    e.target.closest('.form-group').querySelector('.char-counter').textContent = `${e.target.value.length}/120`;
+                }
+            });
+
+            // --- Location/Recurrence Toggles Listener ---
+            document.querySelectorAll('input[name="location-type"]').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    document.getElementById('offline-field').classList.add('hidden');
+                    document.getElementById('online-field').classList.add('hidden');
+                    if (e.target.value === 'offline') {
+                        document.getElementById('offline-field').classList.remove('hidden');
+                    } else {
+                        document.getElementById('online-field').classList.remove('hidden');
+                    }
+                    updatePreview();
+                });
+            });
+
+            document.querySelectorAll('input[name="recurrence-type"]').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    document.getElementById('recurrence-options').classList.toggle('hidden', e.target.value === 'single');
+                    updatePreview();
+                });
+            });
+
+            // --- Tags Input Listener ---
+            const tagsContainer = document.getElementById('tags-container');
+            const tagsInput = document.getElementById('tags-input');
+
+            const renderTags = () => {
+                tagsContainer.querySelectorAll('.tag-item').forEach(tag => tag.remove());
+                
+                eventData.tags.forEach(tagText => {
+                    const tagEl = document.createElement('span');
+                    tagEl.className = 'tag-item bg-blue-100 text-blue-800 text-sm font-medium px-2 py-1 rounded-full flex items-center space-x-1';
+                    tagEl.innerHTML = `<span>${tagText}</span><button type="button" class="tag-remove" data-tag="${tagText}"><i data-lucide="x" class="w-3 h-3 text-blue-600 hover:text-blue-800"></i></button>`;
+                    tagsContainer.insertBefore(tagEl, tagsInput);
+                });
+                lucide.createIcons();
+                tagsInput.placeholder = eventData.tags.length < MAX_TAGS ? 'Add a tag (e.g., AI, Workshop)' : 'Max tags reached (5)';
+                tagsInput.disabled = eventData.tags.length >= MAX_TAGS;
+                autoSave();
+            };
+            window.renderTags = renderTags; // Make it globally accessible for initial load
+
+            tagsInput.addEventListener('keydown', (e) => {
+                const value = tagsInput.value.trim();
+                // Add tag on Enter/Comma
+                if ((e.key === 'Enter' || e.key === ',') && value) {
+                    e.preventDefault();
+                    if (eventData.tags.length < MAX_TAGS && !eventData.tags.includes(value)) {
+                        eventData.tags.push(value);
+                        tagsInput.value = '';
+                        renderTags();
+                    } else if (eventData.tags.length >= MAX_TAGS) {
+                        showToast('Maximum 5 tags allowed.', 'info');
+                    }
+                }
+                // Remove tag on Backspace if input is empty
+                if (e.key === 'Backspace' && value === '' && eventData.tags.length > 0) {
+                    eventData.tags.pop();
+                    renderTags();
+                }
+            });
+
+            tagsContainer.addEventListener('click', (e) => {
+                if (e.target.closest('.tag-remove')) {
+                    const tagText = e.target.closest('.tag-remove').dataset.tag;
+                    eventData.tags = eventData.tags.filter(tag => tag !== tagText);
+                    renderTags();
+                }
+            });
+
+
+            // --- File Upload Listeners (Poster/Brochure) ---
+            document.getElementById('poster-upload').addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const file = this.files[0];
+                    const previewContainer = document.getElementById('poster-preview');
+                    const sidebarImg = document.getElementById('preview-poster-img-sidebar');
+                    const localImg = document.getElementById('preview-poster-img');
+
+                    // Size check
+                    if (file.size > 5 * 1024 * 1024) {
+                        showToast('Poster must be ≤5MB.', 'error');
+                        this.value = ''; 
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        localImg.src = e.target.result;
+                        sidebarImg.src = e.target.result;
+                        localImg.classList.remove('hidden');
+                        sidebarImg.classList.remove('hidden');
+                        previewContainer.querySelector('i').classList.add('hidden');
+                        document.getElementById('poster-placeholder-icon').classList.add('hidden');
+                        previewContainer.classList.remove('hidden');
+                        eventData.poster_url = e.target.result; // Store for preview purposes
+                        autoSave();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    eventData.poster_url = null;
+                    document.getElementById('preview-poster-img').classList.add('hidden');
+                    document.getElementById('preview-poster-img-sidebar').classList.add('hidden');
+                    document.getElementById('poster-placeholder-icon').classList.remove('hidden');
+                    autoSave();
+                }
+            });
+            
+            document.getElementById('brochure-upload').addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                     const file = this.files[0];
+                     if (file.size > 10 * 1024 * 1024) {
+                         showToast('Brochure must be ≤10MB.', 'error');
+                         this.value = ''; 
+                     } else {
+                         showToast(`Brochure (${file.name}) uploaded.`, 'info');
+                     }
+                }
+            });
+
+
+            // --- Rich Text Editor Listener ---
+            const editor = document.getElementById('event-description-editor');
+            const charCounter = editor.closest('.form-group').querySelector('.char-counter');
+
+            document.getElementById('editor-toolbar').addEventListener('click', (e) => {
+                const btn = e.target.closest('button');
+                if (btn && btn.dataset.command) {
+                    e.preventDefault();
+                    const command = btn.dataset.command;
+                    
+                    if (command === 'createLink') {
+                        const selection = window.getSelection();
+                        if (selection.toString().length > 0) {
+                            const url = prompt('Enter the URL:', 'https://');
+                            if (url) {
+                                document.execCommand(command, false, url);
+                            }
+                        } else {
+                             showToast('Please select text to create a link.', 'info');
+                        }
+                    } else {
+                        document.execCommand(command, false, null);
+                    }
+                    editor.focus();
+                }
+            });
+
+            // Content update/char count
+            editor.addEventListener('input', () => {
+                const textLength = editor.textContent.length;
+                charCounter.textContent = `${textLength}/2000`;
+                if (textLength > 2000) {
+                    charCounter.classList.add('text-red-500');
+                } else {
+                    charCounter.classList.remove('text-red-500');
+                }
+                updatePreview();
+                autoSave();
+            });
+
+            // --- Ticket Tier Management ---
+            const ticketContainer = document.getElementById('ticket-tiers-container');
+            document.getElementById('add-tier-btn').addEventListener('click', () => {
+                ticketTierCounter++;
+                const newTier = { id: ticketTierCounter, name: `Custom Tier ${ticketTierCounter - 1}`, price: 0, capacity: null };
+                eventData.ticket_tiers.push(newTier);
+                renderTicketFormTiers(); 
+                updatePreview(); 
+            });
+            
+            const renderTicketFormTiers = () => {
+                ticketContainer.innerHTML = ''; 
+                
+                eventData.ticket_tiers.forEach(tier => {
+                    const isGeneral = tier.id === 1;
+                    const tierHtml = `
+                        <div class="ticket-tier p-4 border rounded-md bg-gray-50 transition-opacity duration-300" data-id="${tier.id}">
+                            <h4 class="font-medium flex justify-between items-center">
+                                <input type="text" name="tier_name" value="${tier.name}" class="text-base font-medium bg-transparent border-none p-0 focus:ring-0 focus:outline-none w-3/4" ${isGeneral ? 'disabled title="General admission name cannot be changed"' : ''}>
+                                <button type="button" class="text-red-500 hover:text-red-700 disabled:opacity-50" data-action="remove-tier" ${eventData.ticket_tiers.length === 1 ? 'disabled' : ''} aria-label="Remove ticket tier">
+                                    <i data-lucide="x" class="w-4 h-4"></i>
+                                </button>
+                            </h4>
+                            <div class="grid sm:grid-cols-3 gap-4 mt-2">
+                                <div class="form-group col-span-1">
+                                    <label for="price-${tier.id}">Price (₹)</label>
+                                    <input type="number" id="price-${tier.id}" name="price" value="${tier.price}" min="0">
+                                </div>
+                                <div class="form-group col-span-2">
+                                    <label for="tier-capacity-${tier.id}">Capacity (0 for unlimited)</label>
+                                    <input type="number" id="tier-capacity-${tier.id}" name="tier_capacity" value="${tier.capacity !== null ? tier.capacity : ''}" min="0" placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    ticketContainer.insertAdjacentHTML('beforeend', tierHtml);
+                });
+                lucide.createIcons();
+                autoSave();
+            }
+            window.renderTicketFormTiers = renderTicketFormTiers;
+
+            ticketContainer.addEventListener('click', (e) => {
+                const removeBtn = e.target.closest('[data-action="remove-tier"]');
+                if (removeBtn && !removeBtn.disabled) {
+                    const tierId = parseInt(removeBtn.closest('.ticket-tier').dataset.id);
+                    eventData.ticket_tiers = eventData.ticket_tiers.filter(t => t.id !== tierId);
+                    renderTicketFormTiers();
+                    renderTicketTiers();
+                }
+            });
+            
+            ticketContainer.addEventListener('input', (e) => {
+                const input = e.target;
+                const tierEl = input.closest('.ticket-tier');
+                const tierId = parseInt(tierEl.dataset.id);
+                const tier = eventData.ticket_tiers.find(t => t.id === tierId);
+
+                if (tier) {
+                    if (input.name === 'tier_name') tier.name = input.value;
+                    if (input.name === 'price') tier.price = parseInt(input.value || 0);
+                    if (input.name === 'tier_capacity') tier.capacity = input.value ? parseInt(input.value) : null;
+                    
+                    updatePreview(); 
+                    autoSave();
+                }
+            });
+            
+            // --- Mobile Preview Toggle ---
+            document.getElementById('mobile-preview-toggle').addEventListener('click', (e) => {
+                const content = document.getElementById('event-preview-content');
+                const isCollapsed = e.target.dataset.state === 'collapsed';
+                
+                if (isCollapsed) {
+                    content.classList.remove('hidden-mobile');
+                    e.target.dataset.state = 'expanded';
+                    e.target.textContent = 'Hide Preview';
+                    e.target.setAttribute('aria-expanded', 'true');
+                } else {
+                    content.classList.add('hidden-mobile');
+                    e.target.dataset.state = 'collapsed';
+                    e.target.textContent = 'Show Preview';
+                    e.target.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+        }
+
+        // --- MAIN EXECUTION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDraft();
+            initializeListeners();
+            updateStepUI();
+            
+            // Render complex UI elements based on loaded data
+            renderTags();
+            renderTicketFormTiers();
+            
+            // Re-run preview update to ensure all loaded data is displayed
+            updatePreview();
         });
     </script>
 </body>
